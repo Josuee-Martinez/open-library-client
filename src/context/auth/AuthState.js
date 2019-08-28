@@ -3,7 +3,7 @@ import axios from "axios";
 import authReducer from "./authReducer";
 import AuthContext from "./authContext";
 import setToken from "../../utils/setToken";
-// import setToken from "../../utils/setToken";
+import APIURL from "../../helpers/environment";
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -31,7 +31,7 @@ const AuthState = props => {
       setToken(localStorage.token);
     }
     try {
-      const res = await axios.get("http://localhost:3000/api/auth");
+      const res = await axios.get(`${APIURL}/api/auth`);
       dispatch({ type: USER_LOADED, payload: res.data });
     } catch (err) {
       dispatch({ type: AUTH_ERROR });
@@ -46,11 +46,7 @@ const AuthState = props => {
     };
 
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/user",
-        formData,
-        config
-      );
+      const res = await axios.post(`${APIURL}/api/user`, formData, config);
 
       dispatch({ type: REGISTER_SUCCESS, payload: res.data });
       loadUser();
@@ -68,7 +64,7 @@ const AuthState = props => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/user/login",
+        `${APIURL}/api/user/login`,
         formData,
         config
       );
