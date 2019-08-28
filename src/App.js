@@ -1,25 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import AuthState from "./context/auth/AuthState";
+import AlertState from "./context/alertcontext/AlertState";
+import BookState from "./context/bookcontext/BookState";
+
+import setToken from "./utils/setToken";
+
+import "./App.css";
+import Signup from "./components/auth/Signup";
+import Login from "./components/auth/Login";
+import Navigation from "./components/home/Navigation";
+import About from "./components/home/About";
+import Home from "./components/home/Home";
+import Alerts from "./components/home/Alerts";
+import PrivateRoute from "./components/routing/PrivateRoute";
+
+if (localStorage.token) {
+  setToken(localStorage.token);
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthState>
+      <BookState>
+        <AlertState>
+          <Router>
+            <Navigation />
+            <Alerts />
+            <Switch>
+              <PrivateRoute exact path="/" component={Home} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+              <Route path="/about" component={About} />
+            </Switch>
+          </Router>
+        </AlertState>
+      </BookState>
+    </AuthState>
   );
 }
 
